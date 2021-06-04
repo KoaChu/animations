@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 
-export default function DrawerButton({ navigation }) {
+export default function DrawerButton({ navigation, color }) {
     return (
         <TouchableOpacity style={styles.button}  onPress={() => { navigation.toggleDrawer() }}>
             <Ionicons name="menu" size={24} color="#fff" />

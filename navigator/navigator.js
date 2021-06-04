@@ -9,6 +9,7 @@ import ScrollingYScreen from '../screens/ScrollingYScreen';
 import GalleryScreen from '../screens/GalleryScreen';
 import SharedListScreen from '../screens/SharedElement/SharedListScreen';
 import SharedDetailsScreen from '../screens/SharedElement/SharedDetailsScreen';
+import ButtonTransitionScreen from '../screens/ButtonTransitionScreen';
 
 const Drawer = createDrawerNavigator();
 // const Stack = createStackNavigator();
@@ -22,6 +23,7 @@ export default MainDrawer = () => {
                 <Drawer.Screen name='Scroll X' component={ScrollingYScreen} />
                 <Drawer.Screen name='Gallery' component={GalleryScreen} />
                 <Drawer.Screen name='Shared Element' component={SharedStack} />
+                <Drawer.Screen name='Button Transition' component={ButtonTransitionScreen} />
             </Drawer.Navigator>
         </NavigationContainer>
     );

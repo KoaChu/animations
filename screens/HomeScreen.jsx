@@ -16,7 +16,7 @@ export default function HomeScreen({ navigation }) {
             <TouchableOpacity style={styles.button}  onPress={() => { openDrawer() }}>
                 <Ionicons name="menu" size={24} color="#fff" />
             </TouchableOpacity>
-            <Animatable.Text animation="pulse" easing="ease" duration={2000} iterationDelay={2000} iterationCount="infinite" style={styles.title}>
+            <Animatable.Text animation="fadeIn" direction={'alternate'} easing="ease" duration={1000} iterationDelay={500} iterationCount="infinite" style={styles.title}>
                 Choose an animation
             </Animatable.Text>
         </View>
