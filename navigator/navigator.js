@@ -10,6 +10,7 @@ import GalleryScreen from '../screens/GalleryScreen';
 import SharedListScreen from '../screens/SharedElement/SharedListScreen';
 import SharedDetailsScreen from '../screens/SharedElement/SharedDetailsScreen';
 import ButtonTransitionScreen from '../screens/ButtonTransitionScreen';
+import CircularListScreen from '../screens/CircularListScreen';
 
 const Drawer = createDrawerNavigator();
 // const Stack = createStackNavigator();
@@ -24,6 +25,7 @@ export default MainDrawer = () => {
                 <Drawer.Screen name='Gallery' component={GalleryScreen} />
                 <Drawer.Screen name='Shared Element' component={SharedStack} />
                 <Drawer.Screen name='Button Transition' component={ButtonTransitionScreen} />
+                <Drawer.Screen name='Circle List' component={CircularListScreen} />
             </Drawer.Navigator>
         </NavigationContainer>
     );
