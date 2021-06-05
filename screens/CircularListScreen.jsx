@@ -73,7 +73,7 @@ const CircleList = ({ animatedPosValue, setColor }) => {
                     { useNativeDriver: false }
                 )}
                 onMomentumScrollEnd={(ev) => {
-                    scrollActiveIndex(Math.ceil(ev.nativeEvent.contentOffset.y / ITEM_SIZE))
+                    scrollActiveIndex(Math.floor(ev.nativeEvent.contentOffset.y / ITEM_SIZE))
                 }}
                 showsVerticalScrollIndicator={false}
                 bounces={false}
