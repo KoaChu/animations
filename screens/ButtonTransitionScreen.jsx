@@ -9,8 +9,8 @@ import {
   Image,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { AnimatePresence } from 'framer-motion'
-import { MotiView } from 'moti'
+import { AnimatePresence } from "framer-motion";
+import { MotiView } from "moti";
 
 import DrawerButton from "../components/DrawerButton";
 
@@ -19,26 +19,30 @@ const AnimatedAnt = Animated.createAnimatedComponent(AntDesign);
 const { width, height } = Dimensions.get("window");
 const SPACING = 10;
 const CIRCLE_SIZE = 75;
-const runner = 'https://image.flaticon.com/icons/png/512/55/55240.png';
-const finish = 'https://image.flaticon.com/icons/png/512/65/65578.png';
+const runner = "https://image.flaticon.com/icons/png/512/55/55240.png";
+const finish = "https://image.flaticon.com/icons/png/512/65/65578.png";
 
 const CircleButton = ({ onPress, animatedValue, buttonColor }) => {
-    const inputRange = [0, 0.001, 0.5, 0.501, 1];
-    const containerBg = animatedValue.interpolate({
-        inputRange,
-        outputRange: ['gold', 'gold', 'gold', '#3a9fbf', '#3a9fbf']
-    });
-    const circleBg = animatedValue.interpolate({
-        inputRange,
-        outputRange: ['#3a9fbf', '#3a9fbf', '#3a9fbf', 'gold', 'gold']
-    });
-    const buttonOpacity = animatedValue.interpolate({
-        inputRange: [0, 0.250, 0.5, 0.750, 1],
-        outputRange: [1, 0, 0, 0, 1],
-    });
+  const inputRange = [0, 0.001, 0.5, 0.501, 1];
+  const containerBg = animatedValue.interpolate({
+    inputRange,
+    outputRange: ["gold", "gold", "gold", "#3a9fbf", "#3a9fbf"],
+  });
+  const circleBg = animatedValue.interpolate({
+    inputRange,
+    outputRange: ["#3a9fbf", "#3a9fbf", "#3a9fbf", "gold", "gold"],
+  });
+  const buttonOpacity = animatedValue.interpolate({
+    inputRange: [0, 0.25, 0.5, 0.75, 1],
+    outputRange: [1, 0, 0, 0, 1],
+  });
   return (
     <Animated.View
-      style={{ ...StyleSheet.absoluteFillObject, ...styles.circleContainer, backgroundColor: containerBg, }}
+      style={{
+        ...StyleSheet.absoluteFillObject,
+        ...styles.circleContainer,
+        backgroundColor: containerBg,
+      }}
     >
       <Animated.View
         style={[
@@ -81,20 +85,39 @@ const CircleButton = ({ onPress, animatedValue, buttonColor }) => {
   );
 };
 
-const Pic = (src) => {
-    return (
-        <MotiView style={styles.imageWrapper}>
-            {/* <Image
-                source={{ uri: src }}
-            /> */}
-        </MotiView>
-    );
-}
+const Pic = ({ imgSrc, vis, animatedValue, from }) => {
+  const inputRange = [0, 0.8, 1];
+
+  const slideIn = animatedValue.interpolate({
+    inputRange,
+    outputRange: [width, 0, -width],
+  });
+
+  const skew = animatedValue.interpolate({
+    inputRange,
+    outputRange: ["0deg", "15deg", "0deg"],
+  });
+
+  return (
+    <Animated.View
+      style={{
+        width: width * 3,
+        height,
+        justifyContent: "flex-end",
+        transform: [{ translateX: slideIn }, { skewX: skew }],
+      }}
+    >
+      <Image source={{ uri: runner }} style={styles.runner} />
+      <Image source={{ uri: finish }} style={styles.flag} />
+    </Animated.View>
+  );
+};
 
 export default function ButtonTransitionScreen({ navigation }) {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const [index, setIndex] = useState(0);
-  const [buttonColor, setButtoncolor] = useState('gold');
+  const [buttonColor, setButtoncolor] = useState("gold");
+  const [visible, setVisible] = useState(false);
 
   const animation = (toValue) =>
     Animated.timing(animatedValue, {
@@ -105,17 +128,35 @@ export default function ButtonTransitionScreen({ navigation }) {
 
   const onPress = () => {
     setIndex(index === 1 ? 0 : 1);
-    setButtoncolor(index === 1 ? 'gold' : '#3a9fbf');
+    setVisible(!visible);
+    setButtoncolor(index === 1 ? "gold" : "#3a9fbf");
     animation(index === 1 ? 0 : 1).start();
   };
 
   return (
     <View style={styles.container}>
       <DrawerButton navigation={navigation} />
-      {/* <AnimatePresence exitBeforeEnter>
-        <Pic />
-      </AnimatePresence> */}
-      <CircleButton onPress={onPress} animatedValue={animatedValue} buttonColor={buttonColor} />
+      <View
+        style={{
+          width,
+          height: height / 2,
+          backgroundColor: "transparent",
+          position: "absolute",
+          zIndex: 1,
+          justifyContent: "flex-end",
+        }}
+      >
+        <Pic animatedValue={animatedValue} />
+        {/* <AnimatePresence exitBeforeEnter>
+            {!visible && <Pic imgSrc={runner} vis={visible} animatedValue={animatedValue} from={-width}/>}
+            {visible && <Pic imgSrc={finish} vis={visible} animatedValue={animatedValue} from={width} />}
+        </AnimatePresence> */}
+      </View>
+      <CircleButton
+        onPress={onPress}
+        animatedValue={animatedValue}
+        buttonColor={buttonColor}
+      />
     </View>
   );
 }
@@ -140,9 +181,6 @@ const styles = StyleSheet.create({
     borderRadius: CIRCLE_SIZE / 2,
   },
   button: {
-    // width: CIRCLE_SIZE,
-    // height: CIRCLE_SIZE,
-    // borderRadius: CIRCLE_SIZE,
     backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
@@ -153,6 +191,20 @@ const styles = StyleSheet.create({
   imageWrapper: {
     width,
     height,
-    backgroundColor: 'blue'
-  },    
+    backgroundColor: "blue",
+  },
+  runner: {
+    width: 100,
+    height: 100,
+    position: "absolute",
+    left: width / 2 - width - 50,
+    zIndex: 999,
+  },
+  flag: {
+    width: 100,
+    height: 100,
+    position: "absolute",
+    left: width / 2 + width - 50,
+    zIndex: 999,
+  },
 });
